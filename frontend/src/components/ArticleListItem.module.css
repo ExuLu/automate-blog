@@ -1,0 +1,36 @@
+/* src/components/ArticleListItem.module.css */
+
+.card {
+  display: block;
+  padding: 1.25rem 1.5rem;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-subtle);
+  background: var(--bg-card);
+  text-decoration: none;
+  color: inherit;
+  transition: box-shadow 0.15s ease, transform 0.15s ease,
+    border-color 0.15s ease, background-color 0.15s ease;
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-soft);
+  border-color: var(--accent-soft);
+}
+
+.title {
+  margin: 0 0 0.35rem;
+  font-size: 1.1rem;
+}
+
+.text {
+  margin: 0 0 0.75rem;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+.linkText {
+  font-size: 0.9rem;
+  color: var(--accent);
+  font-weight: 500;
+}
