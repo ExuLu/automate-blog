@@ -6,11 +6,9 @@ exports.getAllArticles = (req, res) => {
       status: 'success',
     });
   } catch (err) {
-    // res.status(err.status).json({
-    //   status: err.status,
-    //   error: err,
-    //   message: err.message,
-    // });
+    res.status(500).json({
+      status: 'error',
+    });
   }
 };
 
@@ -20,11 +18,9 @@ exports.getArticleById = (req, res) => {
       status: 'success',
     });
   } catch (err) {
-    // res.status(err.status).json({
-    //   status: err.status,
-    //   error: err,
-    //   message: err.message,
-    // });
+    res.status(500).json({
+      status: 'error',
+    });
   }
 };
 
@@ -50,15 +46,8 @@ exports.createArticle = (req, res) => {
       },
     });
   } catch (err) {
-    console.log(err);
     res.status(500).json({
       status: 'error',
     });
-    // console.log(err.status);
-    // res.status(err.status).json({
-    //   status: err.status,
-    //   error: err,
-    //   message: err.message,
-    // });
   }
 };
