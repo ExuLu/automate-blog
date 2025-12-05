@@ -29,13 +29,31 @@ exports.getArticleById = (req, res) => {
 };
 
 exports.createArticle = (req, res) => {
-  console.log(req.body);
-  const newArticle = { ...req.body, id: uuidv4() };
+  try {
+    const newArticle = {
+      ...req.body,
+      id: uuidv4(),
+      createdAt: new Date().toISOString(),
+    };
 
-  res.status(201).json({
-    status: 'success',
-    data: {
-      article: newArticle,
-    },
-  });
+    if (!req.body.title || !req.body.content) {
+      res.status(400).json({
+        status: 400,
+        message: 'The article should contain title and content',
+      });
+    }
+
+    res.status(201).json({
+      status: 'success',
+      data: {
+        article: newArticle,
+      },
+    });
+  } catch (err) {
+    res.status(err.status).json({
+      status: err.status,
+      error: err,
+      message: err.message,
+    });
+  }
 };
