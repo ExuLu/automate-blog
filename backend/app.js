@@ -3,6 +3,6 @@ const articleRouter = require('./routes/articleRoute');
 
 const app = express();
 
-app.route('/api/articles', articleRouter);
+app.use('/api/articles', articleRouter);
 
 module.exports = app;
