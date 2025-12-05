@@ -1,30 +1,69 @@
 const { v4: uuidv4 } = require('uuid');
+const fs = require('fs');
+const path = require('path');
+
+const FILE_PATH = path.join(__dirname, '..', 'data', 'articles.json');
+
+let articles = JSON.parse(fs.readFileSync(FILE_PATH, 'utf-8'));
+
+function saveArticlesToFile(articles, res, newArticle) {
+  const json = JSON.stringify(articles, null, 2);
+
+  fs.writeFile(FILE_PATH, json, 'utf-8', (err) => {
+    if (err) {
+      articles.pop();
+
+      res.status(500).json({
+        status: 'error',
+        message: 'There was an error while saving an article. Please try again',
+      });
+    }
+
+    res.status(201).json({
+      status: 'success',
+      data: {
+        article: newArticle,
+      },
+    });
+  });
+}
 
 exports.getAllArticles = (req, res) => {
   try {
     res.status(200).json({
       status: 'success',
+      data: {
+        articles,
+      },
     });
   } catch (err) {
-    // res.status(err.status).json({
-    //   status: err.status,
-    //   error: err,
-    //   message: err.message,
-    // });
+    res.status(500).json({
+      status: 'error',
+    });
   }
 };
 
 exports.getArticleById = (req, res) => {
+  const article = articles.find((art) => art.id === req.params.id);
+
+  if (!article) {
+    res.status(401).json({
+      status: 'fail',
+      message: 'Article is not found',
+    });
+  }
+
   try {
     res.status(200).json({
       status: 'success',
+      data: {
+        article,
+      },
     });
   } catch (err) {
-    // res.status(err.status).json({
-    //   status: err.status,
-    //   error: err,
-    //   message: err.message,
-    // });
+    res.status(500).json({
+      status: 'error',
+    });
   }
 };
 
@@ -43,22 +82,12 @@ exports.createArticle = (req, res) => {
       createdAt: new Date().toISOString(),
     };
 
-    res.status(201).json({
-      status: 'success',
-      data: {
-        article: newArticle,
-      },
-    });
+    articles.push(newArticle);
+
+    saveArticlesToFile(articles, res, newArticle);
   } catch (err) {
-    console.log(err);
     res.status(500).json({
       status: 'error',
     });
-    // console.log(err.status);
-    // res.status(err.status).json({
-    //   status: err.status,
-    //   error: err,
-    //   message: err.message,
-    // });
   }
 };
