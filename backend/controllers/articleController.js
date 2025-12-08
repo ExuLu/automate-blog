@@ -1,5 +1,8 @@
 const articleRepository = require('../data/articleRepository');
 
+const titleMaxLength = Number(process.env.TITLE_MAX_LENGTH) || 200;
+const contentMaxLength = Number(process.env.CONTENT_MAX_LENGTH) || 20000;
+
 exports.getAllArticles = (req, res) => {
   const articles = articleRepository.getAllArticles();
 
@@ -36,6 +39,36 @@ exports.validateArticle = (req, res, next) => {
       message: 'The article should contain title and content',
     });
   }
+
+  if (
+    typeof req.body.title !== 'string' ||
+    typeof req.body.content !== 'string'
+  ) {
+    return res.status(400).json({
+      status: 'fail',
+      message: 'Title and content must be strings',
+    });
+  }
+
+  const title = req.body.title.trim();
+  const content = req.body.content.trim();
+
+  if (title.length < 1 || title.length > titleMaxLength) {
+    return res.status(400).json({
+      status: 'fail',
+      message: `Article title should contain from 1 to ${titleMaxLength} characters`,
+    });
+  }
+
+  if (content.length < 1 || content.length > contentMaxLength) {
+    return res.status(400).json({
+      status: 'fail',
+      message: `Article content should contain from 1 to ${contentMaxLength} characters`,
+    });
+  }
+
+  req.body.title = title;
+  req.body.content = content;
 
   next();
 };
