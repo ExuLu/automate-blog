@@ -3,11 +3,14 @@ const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
 const xss = require('xss-clean');
 const cors = require('cors');
+const morgan = require('morgan');
 const articleRouter = require('./routes/articleRoute');
 
 const app = express();
 
 app.use(helmet());
+
+app.use(morgan('dev'));
 
 const limiter = rateLimit({
   max: 100,
