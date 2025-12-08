@@ -1,4 +1,5 @@
 const app = require('./app');
+const dotenv = require('dotenv');
 
 process.on('uncaughtException', (err) => {
   console.log('UNCAUGHT EXCEPTION! 💥 Shutting down...');
@@ -7,7 +8,9 @@ process.on('uncaughtException', (err) => {
   process.exit(1);
 });
 
-const port = 3000;
+dotenv.config();
+
+const port = process.env.PORT || 3000;
 
 const server = app.listen(port, () => {
   console.log(`App running on port ${port}...`);
