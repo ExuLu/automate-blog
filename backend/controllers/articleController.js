@@ -30,14 +30,10 @@ exports.getArticleById = (req, res) => {
 };
 
 exports.createArticle = async (req, res) => {
-  if (!req.body?.title || !req.body?.content) {
-    return res.status(400).json({
-      status: 'fail',
-      message: 'The article should contain title and content',
-    });
-  }
-
-  const newArticle = articleRepository.createArticle(req.body);
+  const newArticle = articleRepository.createArticle({
+    title: req.body.title,
+    content: req.body.content,
+  });
 
   try {
     await articleRepository.saveArticleToFile();
