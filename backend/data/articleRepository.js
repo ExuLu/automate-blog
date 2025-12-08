@@ -10,16 +10,20 @@ const FILE_PATH = path.join(__dirname, 'articles.json');
 try {
   articles = JSON.parse(fs.readFileSync(FILE_PATH, 'utf-8'));
 } catch (err) {
-  // TODO: catch file path error and create new file
-  console.log(err);
+  if (err.code === 'ENOENT') {
+    saveArticleToFile();
+  }
 }
 
-exports.getAllArticles = () => articles;
+function getAllArticles() {
+  return articles;
+}
 
-exports.getArticleById = (id) =>
-  articles.find((article) => article.id === id) ?? null;
+function getArticleById(id) {
+  return articles.find((article) => article.id === id) ?? null;
+}
 
-exports.createArticle = (articleData) => {
+function createArticle(articleData) {
   const newArticle = {
     ...articleData,
     id: uuidv4(),
@@ -29,14 +33,22 @@ exports.createArticle = (articleData) => {
   articles.push(newArticle);
 
   return newArticle;
-};
+}
 
-exports.saveArticleToFile = async () => {
+async function saveArticleToFile() {
   const json = JSON.stringify(articles, null, 2);
 
   return await fsPromises.writeFile(FILE_PATH, json, 'utf-8');
-};
+}
 
-exports.removeArticleAfterError = () => {
+function removeArticleAfterError() {
   articles.pop();
+}
+
+module.exports = {
+  getAllArticles,
+  getArticleById,
+  createArticle,
+  saveArticleToFile,
+  removeArticleAfterError,
 };
