@@ -2,12 +2,13 @@ import ArticleListItem from './ArticleListItem';
 import useArticles from '../hooks/useArticles';
 
 import styles from './ArticleList.module.css';
+import Error from './Error';
 
 const ArticleList = () => {
   const { articles, error, isLoading } = useArticles();
 
   if (isLoading) return <div>Loading...</div>;
-  if (error) return <p>{error}</p>;
+  if (error) return <Error message={error} isMainPage={true} />;
 
   return (
     <div className={styles.container}>
