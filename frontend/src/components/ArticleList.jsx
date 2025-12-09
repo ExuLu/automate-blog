@@ -1,19 +1,20 @@
-import { useState } from 'react';
-
 import ArticleListItem from './ArticleListItem';
-import mockPosts from '../mockPosts';
+import useArticles from '../hooks/useArticles';
 
 import styles from './ArticleList.module.css';
 
 const ArticleList = () => {
-  const [posts] = useState(mockPosts);
+  const { articles, error, isLoading } = useArticles();
+
+  if (isLoading) return <div>Loading...</div>;
+  if (error) return <p>{error}</p>;
 
   return (
     <div className={styles.container}>
       <h1 className={styles.title}>Automated Blog</h1>
       <div className={styles.list}>
-        {posts.map((post) => (
-          <ArticleListItem key={post.id} post={post} />
+        {articles.map((article) => (
+          <ArticleListItem key={article.id} article={article} />
         ))}
       </div>
     </div>
