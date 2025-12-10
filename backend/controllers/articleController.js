@@ -53,3 +53,9 @@ exports.createArticle = async (req, res) => {
     });
   }
 };
+
+exports.generateAndCreateArticle = async (req, res) => {
+  const topic = req.body.topic;
+
+
+};
