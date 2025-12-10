@@ -1,24 +1,58 @@
-const { OpenRouter } = require('@openrouter/sdk');
+const dotenv = require('dotenv');
 const { systemPrompt, userPrompt } = require('./prompts');
+dotenv.config();
 
-const openrouter = new OpenRouter({
-  apiKey: process.env.OPENROUTER_API_KEY,
-});
-
-const MODEL = process.env.LLM_MODEL || 'openai/gpt-oss-120b:free';
+const MODEL = process.env.LLM_MODEL;
+const API_KEY = process.env.OPENROUTER_API_KEY;
+const OPENROUTER_URL = process.env.OPENROUTER_URL;
 
 async function generateArticle({ topic }) {
-  const response = await openrouter.chat.send({
+  const body = {
     model: MODEL,
     messages: [
-      {
-        role: 'system',
-        content: systemPrompt,
-      },
+      { role: 'system', content: systemPrompt },
       {
         role: 'user',
         content: userPrompt(topic).trim(),
       },
     ],
+  };
+
+  const response = await fetch(OPENROUTER_URL, {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${API_KEY}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(body),
   });
+
+  const data = await response.json();
+
+  if (!response.ok) {
+    const message =
+      data?.error?.message ||
+      `OpenRouter request failed with status ${response.status}`;
+    const err = new Error(message);
+    err.status = response.status;
+    throw err;
+  }
+
+  const rawContent = data.choices?.[0]?.message?.content;
+
+  if (!rawContent) {
+    throw new Error('LLM returned empty content');
+  }
+
+  let article;
+  try {
+    article = JSON.parse(rawContent);
+  } catch (e) {
+    console.log('Raw model content:', rawContent);
+    throw new Error('Failed to parse article JSON from LLM');
+  }
+
+  return article;
 }
+
+module.exports = generateArticle;
