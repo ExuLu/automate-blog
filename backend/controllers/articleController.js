@@ -59,7 +59,7 @@ exports.generateAndCreateArticle = async (req, res) => {
   const topic = req.body.topic;
 
   try {
-    const newArticle = createAndGenerate(topic);
+    const newArticle = await createAndGenerate(topic);
 
     res.status(200).json({
       status: 'success',

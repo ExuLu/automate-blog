@@ -16,6 +16,37 @@ if (!OPENROUTER_URL) {
   throw new Error('OPENROUTER_URL is not set');
 }
 
+function parseJsonFromModel(rawContent) {
+  if (!rawContent) {
+    throw new Error('Empty content from LLM');
+  }
+
+  let text = Array.isArray(rawContent)
+    ? rawContent.map((part) => part?.text ?? '').join('')
+    : String(rawContent);
+
+  text = text.trim();
+
+  if (text.startsWith('```')) {
+    const firstBrace = text.indexOf('{');
+    const lastBrace = text.lastIndexOf('}');
+
+    if (firstBrace !== -1 && lastBrace !== -1 && lastBrace > firstBrace) {
+      text = text.slice(firstBrace, lastBrace + 1);
+    }
+  }
+
+  if (!text.trim().startsWith('{')) {
+    const firstBrace = text.indexOf('{');
+    const lastBrace = text.lastIndexOf('}');
+    if (firstBrace !== -1 && lastBrace !== -1 && lastBrace > firstBrace) {
+      text = text.slice(firstBrace, lastBrace + 1);
+    }
+  }
+
+  return JSON.parse(text);
+}
+
 async function generateArticle(topic) {
   const body = {
     model: MODEL,
@@ -56,7 +87,7 @@ async function generateArticle(topic) {
 
   let article;
   try {
-    article = JSON.parse(rawContent);
+    article = parseJsonFromModel(rawContent);
   } catch (err) {
     console.log('Raw model content:', rawContent);
     throw new Error('Failed to parse article JSON from LLM');
