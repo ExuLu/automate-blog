@@ -69,7 +69,11 @@ exports.generateAndCreateArticle = async (req, res) => {
     });
   } catch (err) {
     console.error('Generation failed: ', err);
-    res.status(500).json({
+
+    const statusCode =
+      err.status && Number.isInteger(err.status) ? err.status : 500;
+
+    res.status(statusCode).json({
       status: 'error',
       message:
         err.message ||
