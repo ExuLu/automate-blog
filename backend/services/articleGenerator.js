@@ -27,7 +27,6 @@ function parseJsonFromModel(rawContent) {
 
   const firstBrace = text.indexOf('{');
   const lastBrace = text.lastIndexOf('}');
-  console.log(lastBrace);
 
   if (firstBrace === -1 || lastBrace === -1 || lastBrace < firstBrace) {
     console.log('Model content without valid JSON braces:', text);
@@ -39,7 +38,7 @@ function parseJsonFromModel(rawContent) {
   try {
     return JSON.parse(jsonText);
   } catch (err) {
-    console.log('Raw model content:', rawContent);
+    console.log('Raw model content:', jsonText);
     throw new Error('Failed to parse article JSON from LLM');
   }
 }
