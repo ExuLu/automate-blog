@@ -1,8 +1,22 @@
 let topics = [];
 const FILE_PATH = path.join(__dirname, 'topics.json');
 
+const DEFAULT_TOPIC = 'AI role in modern technologies';
+
 try {
   topics = JSON.parse(fs.readFileSync(FILE_PATH, 'utf-8'));
+
+  if (Array.isArray(parsed)) {
+    topics = parsed
+      .filter((t) => typeof t === 'string')
+      .map((t) => t.trim())
+      .filter((t) => t.length > 0);
+  } else {
+    console.error(
+      'topics.json does not contain an array. Using empty topics list.'
+    );
+    topics = [];
+  }
 } catch (err) {
   if (err.code === 'ENOENT') {
     console.log('topics.json not found. Creating an empty file...');
@@ -14,11 +28,13 @@ try {
   }
 }
 
-exports.getRandomTopic = function () {
+function getRandomTopic() {
   if (!topics.length) {
-    return 'AI role in modern technologies';
+    return DEFAULT_TOPIC;
   }
 
   const index = Math.floor(Math.random() * topics.length);
   return topics[index];
-};
+}
+
+module.exports = { getRandomTopic, DEFAULT_TOPIC };
