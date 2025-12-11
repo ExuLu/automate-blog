@@ -13,8 +13,8 @@ function startArticleScheduler() {
   const schedule = process.env.ARTICLE_CRON || '0 9 * * *';
 
   cron.schedule(schedule, async () => {
-    console.log('Starting scheduled article generation...');
     const topic = getRandomTopic();
+    console.log(`Starting scheduled article generation for topic: "${topic}"`);
 
     try {
       await createAndGenerate(topic);
