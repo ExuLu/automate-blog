@@ -35,4 +35,6 @@ jobs:
           script: |
             cd /opt/automated-blog/
             aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 304936888939.dkr.ecr.us-east-1.amazonaws.com
+            sudo mkdir -p /root/.docker
+            sudo cp /home/ec2-user/.docker/config.json /root/.docker/config.json
             sudo docker compose -f backend.docker-compose.yml up -d
