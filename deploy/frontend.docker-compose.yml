@@ -1,0 +1,21 @@
+version: '3.9'
+
+services:
+  frontend:
+    # build:
+    #   context: .
+    #   dockerfile: Dockerfile
+    image: '304936888939.dkr.ecr.us-east-1.amazonaws.com/production/frontend:latest'
+    container_name: 'blog-frontend'
+    ports:
+      - '80:80'
+    env_file: '/opt/automated-blog/.secrets'
+    environment:
+      PORT: '80'
+      VITE_API_URL: '/api'
+    networks:
+      - 'automated-blog'
+
+networks:
+  automated-blog:
+    external: 'true'

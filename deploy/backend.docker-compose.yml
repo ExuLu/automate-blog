@@ -22,6 +22,9 @@ services:
       TITLE_MAX_LENGTH: '200'
       CONTENT_MAX_LENGTH: '20000'
       ARTICLES_PATH: '/app/data/articles.json'
+    networks:
+      - 'automated-blog'
 
 networks:
   automated-blog:
+    external: 'true'

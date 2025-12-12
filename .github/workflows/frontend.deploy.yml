@@ -7,7 +7,7 @@ on:
 jobs:
   deploy:
     name: Deploy via SSH
-    runs-on: codebuild-automated-blog-backend-${{ github.run_id }}-${{ github.run_attempt }}
+    runs-on: codebuild-automated-blog-frontend-${{ github.run_id }}-${{ github.run_attempt }}
 
     steps:
       - name: Checkout repository
@@ -20,7 +20,7 @@ jobs:
           username: ec2-user
           key: ${{ secrets.BLOG_SSH_PRIVATE_KEY }}
           port: 22
-          source: 'deploy/backend.docker-compose.yml'
+          source: 'deploy/frontend.docker-compose.yml'
           target: '/opt/automated-blog'
           overwrite: true
           strip_components: 1
@@ -37,4 +37,4 @@ jobs:
             aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 304936888939.dkr.ecr.us-east-1.amazonaws.com
             sudo mkdir -p /root/.docker
             sudo cp /home/ec2-user/.docker/config.json /root/.docker/config.json
-            sudo docker compose -f backend.docker-compose.yml up -d
+            sudo docker compose -f frontend.docker-compose.yml up -d
