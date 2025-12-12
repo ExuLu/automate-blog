@@ -6,7 +6,7 @@ on:
       image_tag:
         description: "Docker image tag (e.g. 20251212-1831 or 'latest')"
         required: true
-        default: "latest"
+        default: 'latest'
 
 jobs:
   deploy:
@@ -19,11 +19,13 @@ jobs:
 
       - name: Replace tag in docker-compose (yq)
         if: ${{ inputs.image_tag != 'latest' }}
-        uses: mikefarah/yq@v4
-        env:
-          IMAGE_TAG: ${{ inputs.image_tag }}
         with:
-          cmd: >
+          run: |
+            FILE_PATH="deploy/backend.docker-compose.yml"
+
+            sudo curl -L https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64 -o /usr/local/bin/yq
+            sudo chmod +x /usr/local/bin/yq
+            yq --version
             yq -i '
               (.services[].image |=
                 (if . == null then .
@@ -31,7 +33,7 @@ jobs:
                  else .
                  end)
               )
-            ' deploy/backend.docker-compose.yml
+            ' $FILE_PATH
 
       - name: Copy files to server via SSH
         uses: appleboy/scp-action@v0.1.7
