@@ -1,28 +1,4 @@
-const isBrowser = typeof window !== 'undefined';
-
-function resolveApiUrl() {
-  const envUrl = import.meta.env.VITE_API_URL;
-
-  if (!envUrl) {
-    return isBrowser ? `${window.location.origin}/api` : '/api';
-  }
-
-  const envPointsToLocalhost = /^https?:\/\/(localhost|127\.0\.0\.1)/i.test(
-    envUrl
-  );
-  const servedFromRemoteHost =
-    isBrowser &&
-    !/^https?:\/\/(localhost|127\.0\.0\.1)/i.test(window.location.origin);
-
-  if (envPointsToLocalhost && servedFromRemoteHost) {
-    return `${window.location.origin}/api`;
-  }
-
-  console.log(envUrl);
-  return envUrl;
-}
-
-const API_URL = resolveApiUrl();
+const API_URL = import.meta.env.VITE_API_URL || '/api';
 
 async function request(path, options = {}) {
   const config = { ...options };
