@@ -17,4 +17,4 @@ services:
 
 networks:
   automated-blog:
-    # external: 'true'
+    external: 'true'

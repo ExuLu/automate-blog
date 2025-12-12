@@ -10,7 +10,7 @@ on:
 
 jobs:
   deploy:
-    name: Deploy via SSH
+    name: Backend - Deploy to server
     runs-on: codebuild-automated-blog-backend-${{ github.run_id }}-${{ github.run_attempt }}
 
     steps:
@@ -59,4 +59,5 @@ jobs:
             aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 304936888939.dkr.ecr.us-east-1.amazonaws.com
             sudo mkdir -p /root/.docker
             sudo cp /home/ec2-user/.docker/config.json /root/.docker/config.json
-            sudo docker compose -f backend.docker-compose.yml up -d
+            docker compose -f backend.docker-compose.yml up -d
+

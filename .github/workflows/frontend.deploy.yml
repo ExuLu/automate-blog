@@ -10,7 +10,7 @@ on:
 
 jobs:
   deploy:
-    name: Deploy via SSH
+    name: Frontend - Deploy to server
     runs-on: codebuild-automated-blog-frontend-${{ github.run_id }}-${{ github.run_attempt }}
 
     steps:

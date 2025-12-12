@@ -10,7 +10,7 @@ services:
     ports:
       - '3000:3000'
     volumes:
-      - '/opt/automated-blog/data:/app/data'
+      - '/opt/automated-blog/persistence:/app/persistence'
     env_file: '/opt/automated-blog/.secrets'
     environment:
       PORT: '3000'
@@ -21,10 +21,10 @@ services:
       ARTICLE_CRON: '*/1 * * * *'
       TITLE_MAX_LENGTH: '200'
       CONTENT_MAX_LENGTH: '20000'
-      ARTICLES_PATH: '/app/data/articles.json'
+      ARTICLES_PATH: '/app/persistence/articles.json'
     networks:
       - 'automated-blog'
 
 networks:
   automated-blog:
-    # external: 'true'
+    external: 'true'
