@@ -29,11 +29,13 @@ jobs:
         uses: docker/setup-buildx-action@v3
 
       - name: Build Docker image
+        working-directory: frontend
         run: |
           echo "Using tag: ${IMAGE_TAG}"
           docker build -t production-frontend:${IMAGE_TAG} .
 
       - name: Tag and push image to ECR
+        working-directory: frontend
         run: |
           REPOSITORY=production/frontend
 
