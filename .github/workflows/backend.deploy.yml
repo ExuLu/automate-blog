@@ -21,7 +21,7 @@ jobs:
         if: ${{ inputs.image_tag != 'latest' }}
         env:
           IMAGE_TAG: ${{ inputs.image_tag }}
-          FILE_PATH: 'deploy/backend.docker-compose.yml'
+          FILE_PATH: "deploy/backend.docker-compose.yml"
         run: |
           sudo curl -L https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64 -o /usr/local/bin/yq
           sudo chmod +x /usr/local/bin/yq
@@ -59,4 +59,4 @@ jobs:
             aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 304936888939.dkr.ecr.us-east-1.amazonaws.com
             sudo mkdir -p /root/.docker
             sudo cp /home/ec2-user/.docker/config.json /root/.docker/config.json
-            docker compose -p blog-backend -f backend.docker-compose.yml up -d
+            sudo docker compose -p blog-backend -f backend.docker-compose.yml up -d
