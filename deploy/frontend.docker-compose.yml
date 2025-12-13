@@ -3,6 +3,7 @@ version: '3.9'
 services:
   frontend:
     image: '304936888939.dkr.ecr.us-east-1.amazonaws.com/production/frontend:latest'
+    pull_policy: always
     container_name: 'blog-frontend'
     ports:
       - '80:80'
