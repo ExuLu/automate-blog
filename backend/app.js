@@ -7,7 +7,9 @@ const articleRouter = require('./routes/articleRoute');
 
 const app = express();
 const FRONTEND_ORIGIN = process.env.FRONTEND_ORIGIN;
-// || 'http://localhost:80';
+
+app.set('trust proxy', true);
+
 const corsOptions = {
   origin: FRONTEND_ORIGIN,
   methods: ['GET', 'POST'],
