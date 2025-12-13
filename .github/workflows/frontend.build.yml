@@ -1,9 +1,6 @@
 name: Frontend - Bake image
 
 on:
-  push:
-    paths:
-      - 'frontend/**'
   pull_request:
     paths:
       - 'frontend/**'
